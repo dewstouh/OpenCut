@@ -50,7 +50,7 @@ export function BackgroundSettings() {
           <h2 className="text-sm">Background</h2>
           <div className="flex items-center gap-2 text-sm">
             {tabs.map((tab) => (
-              <span
+              <button
                 key={tab.value}
                 onClick={() => {
                   // Switch to the background type when clicking tabs
@@ -66,12 +66,14 @@ export function BackgroundSettings() {
                   }
                 }}
                 className={cn(
-                  "text-muted-foreground cursor-pointer",
+                  "text-muted-foreground cursor-pointer bg-transparent border-none p-0 text-sm",
                   activeTab === tab.value && "text-foreground"
                 )}
+                aria-pressed={activeTab === tab.value}
+                aria-label={`Switch to ${tab.label.toLowerCase()} background`}
               >
                 {tab.label}
-              </span>
+              </button>
             ))}
           </div>
         </div>
@@ -102,9 +104,9 @@ function ColorView({
     <div className="w-full h-full">
       <div className="absolute top-8 left-0 w-[calc(100%-1rem)] h-12 bg-gradient-to-b from-popover to-transparent pointer-events-none"></div>
       <div className="grid grid-cols-4 gap-2 w-full h-full p-3 pt-0 overflow-auto">
-        <div className="w-full aspect-square rounded-sm cursor-pointer border border-foreground/15 hover:border-primary flex items-center justify-center">
+        <button className="w-full aspect-square rounded-sm cursor-pointer border border-foreground/15 hover:border-primary flex items-center justify-center bg-transparent" aria-label="Open color picker">
           <PipetteIcon className="size-4" />
-        </div>
+        </button>
         {colors.map((color) => (
           <ColorItem
             key={color}
@@ -128,13 +130,15 @@ function ColorItem({
   onClick: () => void;
 }) {
   return (
-    <div
+    <button
       className={cn(
-        "w-full aspect-square rounded-sm cursor-pointer hover:border-2 hover:border-primary",
+        "w-full aspect-square rounded-sm cursor-pointer hover:border-2 hover:border-primary border-0",
         isSelected && "border-2 border-primary"
       )}
       style={{ backgroundColor: color }}
       onClick={onClick}
+      aria-label={`Select ${color} background color`}
+      aria-pressed={isSelected}
     />
   );
 }
@@ -157,13 +161,15 @@ function BlurView({
   return (
     <div className="grid grid-cols-3 gap-2 w-full p-3 pt-0">
       {blurLevels.map((blur) => (
-        <div
+        <button
           key={blur.value}
           className={cn(
-            "w-full aspect-square rounded-sm cursor-pointer hover:border-2 hover:border-primary relative overflow-hidden",
+            "w-full aspect-square rounded-sm cursor-pointer hover:border-2 hover:border-primary relative overflow-hidden border-0",
             selectedBlur === blur.value && "border-2 border-primary"
           )}
           onClick={() => onBlurSelect(blur.value)}
+          aria-label={`Select ${blur.label.toLowerCase()} blur intensity`}
+          aria-pressed={selectedBlur === blur.value}
         >
           <Image
             src={blurImage}
@@ -177,7 +183,7 @@ function BlurView({
               {blur.label}
             </span>
           </div>
-        </div>
+        </button>
       ))}
     </div>
   );
